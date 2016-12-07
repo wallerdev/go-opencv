@@ -17,11 +17,17 @@ import (
 )
 
 const (
-	CV_INTER_NN       = int(C.CV_INTER_NN)
-	CV_INTER_LINEAR   = int(C.CV_INTER_LINEAR)
-	CV_INTER_CUBIC    = int(C.CV_INTER_CUBIC)
-	CV_INTER_AREA     = int(C.CV_INTER_AREA)
-	CV_INTER_LANCZOS4 = int(C.CV_INTER_LANCZOS4)
+	CV_INTER_NN         = int(C.CV_INTER_NN)
+	CV_INTER_LINEAR     = int(C.CV_INTER_LINEAR)
+	CV_INTER_CUBIC      = int(C.CV_INTER_CUBIC)
+	CV_INTER_AREA       = int(C.CV_INTER_AREA)
+	CV_INTER_LANCZOS4   = int(C.CV_INTER_LANCZOS4)
+	CV_TM_SQDIFF        = int(C.CV_TM_SQDIFF)
+	CV_TM_SQDIFF_NORMED = int(C.CV_TM_SQDIFF_NORMED)
+	CV_TM_CCORR         = int(C.CV_TM_CCORR)
+	CV_TM_CCORR_NORMED  = int(C.CV_TM_CCORR_NORMED)
+	CV_TM_CCOEFF        = int(C.CV_TM_CCOEFF)
+	CV_TM_CCOEFF_NORMED = int(C.CV_TM_CCOEFF_NORMED)
 )
 
 func Resize(src *IplImage, width, height, interpolation int) *IplImage {
@@ -148,11 +154,10 @@ func BoundingRect(points unsafe.Pointer) Rect {
 func MatchTemplate(image *IplImage, templ *IplImage, method int) *IplImage {
 	patchx := templ.Width()
 	patchy := templ.Height()
-	iwidth := image.Width() - patchx + 1
-	iheight := image.Height() - patchy + 1
-	method = C.CV_TM_SQDIFF_NORMED
+	width := image.Width() - patchx + 1
+	height := image.Height() - patchy + 1
 
-	size := C.cvSize(C.int(iwidth), C.int(iheight))
+	size := C.cvSize(C.int(width), C.int(height))
 	result := C.cvCreateImage(size, C.int(IPL_DEPTH_32F), C.int(1))
 
 	C.cvMatchTemplate(unsafe.Pointer(image), unsafe.Pointer(templ), unsafe.Pointer(result), C.int(method))
