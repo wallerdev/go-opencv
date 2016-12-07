@@ -737,6 +737,26 @@ func (src *IplImage) EqualizeHist(dst *IplImage) {
 }
 
 /****************************************************************************************\
+*                                 Operations on Arrays                        *
+\****************************************************************************************/
+
+func MinMaxLoc(src *IplImage) (float64, float64, Point2D32f, Point2D32f) {
+	var minVal, maxVal C.double
+	var minLoc, maxLoc C.CvPoint
+
+	C.cvMinMaxLoc(
+		unsafe.Pointer(src),
+		&minVal,
+		&maxVal,
+		&minLoc,
+		&maxLoc,
+		nil,
+	)
+
+	return float64(minVal), float64(maxVal), Point2D32f{float32(minLoc.x), float32(minLoc.y)}, Point2D32f{float32(maxLoc.x), float32(maxLoc.y)}
+}
+
+/****************************************************************************************\
 *                      Discrete Linear Transforms and Related Functions       *
 \****************************************************************************************/
 
